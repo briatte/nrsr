@@ -1,11 +1,8 @@
 # data
 
-library(httr)
 library(dplyr)
-library(lubridate)
 library(stringr)
-library(readr)
-library(rvest)
+library(XML)
 
 # networks
 
@@ -19,3 +16,9 @@ library(tnet)
 
 library(ggplot2)
 library(grid)
+
+# extras
+
+library(httr)      # handle POST HTTP requests
+library(readr)     # quicker i/o for CSV files
+library(rvest)     # easier HTML parsing

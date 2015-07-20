@@ -1,7 +1,7 @@
 # note: all data are scraped from sponsor pages
 #
 # 1. first, scrape the sponsors, using the complete listing of seat changes;
-#    the listing covers legislatures 1-6 and contains all MPs, unlike the A-Z 
+#    the listing covers legislatures 1-6 and contains all MPs, unlike the A-Z
 #    listings, which are not exhaustive (MPs/legislature vary too much)
 #
 # 2. then, scrape the sponsors' bill initiation pages, which contain the unique
@@ -277,7 +277,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   a$cpt = gsub("(.*)&ID=(\\d+)", "\\2", a$cpt) %>% as.integer
 
   # clean dates
-  a$date = a$date = parse_date_time(a$date, "%d. %m. %Y") %>% as.Date
+  a$date = a$date = strptime(a$date, "%d. %m. %Y") %>% as.Date
 
   # remove duplicates and one bill with no sponsors
   a = unique(a) %>%
