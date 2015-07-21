@@ -29,8 +29,6 @@ The sponsor names are standardized by converting them to ASCII, which moves all 
 
 The sponsors data have multiple entries for each sponsor (one per legislature in which the sponsor sat).
 
-legislature	id	name	nyears	title	first	last	party	born	natl	place	county	photo	sex	uid
-
 - `legislature` -- legislature of activity
 - `id` -- numeric id; points to the profile URL
 - `name` -- full name, without titles like "PhDr." or "Ing."
