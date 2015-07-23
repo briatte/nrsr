@@ -63,7 +63,7 @@ for(i in 133:1) {
 
 }
 
-write_csv(c, "data/committees.csv")
+write.csv(c, "data/committees.csv", row.names = NULL)
 
 cat("Building co-membership matrix...\n")
 

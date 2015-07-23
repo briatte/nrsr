@@ -140,11 +140,11 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
     # all sponsors uniquely identified by their full names within each legislature
     stopifnot(nrow(s) == paste(s$name, s$legislature, s$id) %>% n_distinct)
 
-    write_csv(arrange(s, legislature, id), sponsors_index)
+    write.csv(arrange(s, legislature, id), sponsors_index, row.names = NULL)
 
   }
 
-  s = read_csv(sponsors_index)
+  s = read.csv(sponsors_index, stringsAsFactors = FALSE)
 
   # download sponsor pages (rerun to fix network errors)
   # bill initiation pages are all empty for l. 1: skip
@@ -364,15 +364,15 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   s$name = gsub("(.*), (.*)", "\\2 \\1", s$name)
 
   # export sponsors
-  write_csv(s, sponsors)
+  write.csv(s, sponsors, row.names = NULL)
 
   # export bills
-  write_csv(a, bills)
+  write.csv(a, bills, row.names = NULL)
 
 }
 
-s = read_csv(sponsors)
-a = read_csv(bills)
+s = read.csv(sponsors, stringsAsFactors = FALSE)
+a = read.csv(bills, stringsAsFactors = FALSE)
 
 # download sponsor photos (rerun to fix network errors)
 
