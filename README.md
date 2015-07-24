@@ -1,4 +1,4 @@
-This repository contains code to build cosponsorship networks from bills passed in of the [Slovakian Parliament](http://www.nrsr.sk/) .
+This repository contains code to build cosponsorship networks from bills passed in the [Slovakian Parliament](http://www.nrsr.sk/).
 
 - [interactive demo](http://f.briatte.org/parlviz/nrsr)
 - [static plots](http://f.briatte.org/parlviz/nrsr/plots.html)
