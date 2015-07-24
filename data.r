@@ -140,7 +140,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
     # all sponsors uniquely identified by their full names within each legislature
     stopifnot(nrow(s) == paste(s$name, s$legislature, s$id) %>% n_distinct)
 
-    write.csv(arrange(s, legislature, id), sponsors_index, row.names = NULL)
+    write.csv(arrange(s, legislature, id), sponsors_index, row.names = FALSE)
 
   }
 
@@ -364,10 +364,10 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   s$name = gsub("(.*), (.*)", "\\2 \\1", s$name)
 
   # export sponsors
-  write.csv(s, sponsors, row.names = NULL)
+  write.csv(s, sponsors, row.names = FALSE)
 
   # export bills
-  write.csv(a, bills, row.names = NULL)
+  write.csv(a, bills, row.names = FALSE)
 
 }
 
