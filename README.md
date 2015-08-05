@@ -45,4 +45,4 @@ The sponsors data have multiple entries for each sponsor (one per legislature in
 - `sex` -- gender (F/M), imputed from first and family names ('á')
 - `uid` -- standardized name that matches those in the bill listings
 
-Notes -- constituencies are standardized to Wikipedia English handles, and genders have been checked to ensure that males with a final 'a' in their first name are coded as males (e.g. Béla Bugár).
+Notes -- constituencies are standardized to Wikipedia Slovenčina handles, and genders have been checked to ensure that males with a final 'a' in their first name are coded as males (e.g. Béla Bugár).
