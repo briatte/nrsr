@@ -52,5 +52,5 @@ scores = c(
   "OLANO" = 7.4
 )
 
+stopifnot(names(colors) == names(groups))
 stopifnot(names(colors) == names(scores))
-order = names(colors)[ order(scores) ]

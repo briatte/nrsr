@@ -15,6 +15,15 @@ dir.create("raw"    , showWarnings = FALSE)
 
 plot = TRUE
 gexf = TRUE
+mode = "fruchtermanreingold"
+meta = c(
+  "cty" = "Slovakia",
+  "lang" = "sk", # Wikipedia language for chamber and constituencies
+  "ch" = "Národná_rada_Slovenskej_republiky",
+  "type" = "Unicameral",
+  "ipu" = 2285,
+  "seats" = 150
+)
 
 # build routine
 

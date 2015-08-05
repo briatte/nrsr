@@ -13,11 +13,11 @@ sponsors_index = "data/sponsors-index.csv"
 sponsors = "data/sponsors.csv"
 bills = "data/bills.csv"
 
-if(!file.exists(sponsors) | !file.exists(bills)) {
+if (!file.exists(sponsors) | !file.exists(bills)) {
 
   # download sponsor indexes
 
-  if(!file.exists(sponsors_index)) {
+  if (!file.exists(sponsors_index)) {
 
     u = paste0(root, "Default.aspx?sid=poslanci%2fzmeny")
     p = GET(u)
@@ -35,7 +35,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
 
     # loop over all legislatures and pages
 
-    for(i in 1:6) {
+    for (i in 1:6) {
 
       j = 0
       l = 1
@@ -103,7 +103,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
     i = txtProgressBar(0, length(p), style = 3)
     s = data_frame()
 
-    for(j in p) {
+    for (j in p) {
 
       setTxtProgressBar(i, which(p == j))
 
@@ -157,7 +157,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
 
   i = txtProgressBar(0, length(p), style = 3)
 
-  for(j in p) {
+  for (j in p) {
 
     setTxtProgressBar(i, which(p == j))
 
@@ -165,11 +165,11 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
 
     f = gsub("(.*)PoslanecID=(\\d+)&CisObdobia=(\\d)", "raw/mp-\\2-\\3.html", j)
 
-    if(!file.exists(f))
+    if (!file.exists(f))
       try(download.file(paste0(root, j), f, mode = "wb", quiet = TRUE),
           silent = TRUE)
 
-    if(!file.info(f)$size) {
+    if (!file.info(f)$size) {
 
       cat("Failed to download:", f, "\n")
       file.remove(f)
@@ -184,11 +184,11 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
 
     f = gsub("(.*)PoslanecID=(\\d+)&CisObdobia=(\\d)", "raw/activity-\\2-\\3.html", j)
 
-    if(!file.exists(f))
+    if (!file.exists(f))
       try(download.file(paste0(root, u), f, mode = "wb", quiet = TRUE),
           silent = TRUE)
 
-    if(!file.info(f)$size) {
+    if (!file.info(f)$size) {
 
       cat("Failed to download:", f, "\n")
       file.remove(f)
@@ -196,6 +196,8 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
     }
 
   }
+
+  cat("\n")
 
   # parse sponsor details
 
@@ -206,7 +208,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
 
   w = data_frame()
 
-  for(j in p) {
+  for (j in p) {
 
     setTxtProgressBar(i, which(p == j))
 
@@ -241,14 +243,14 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   i = txtProgressBar(0, length(p), style = 3)
   a = data_frame()
 
-  for(j in p) {
+  for (j in p) {
 
     setTxtProgressBar(i, which(p == j))
 
     t = html(j) %>%
       html_nodes(xpath = "//table[@id='_sectionLayoutContainer_ctl01_dgResult']/tbody/tr")
 
-    if(length(t) > 0)
+    if (length(t) > 0)
       a = rbind(a, data_frame(
         legislature = j,
         id = sapply(t, html_nodes, xpath = "td[1]/a") %>%
@@ -266,6 +268,8 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
       ))
 
   }
+
+  cat("\n")
 
   # get legislature id
   a$legislature = gsub("(.*)-(\\d)\\.html", "\\2", a$legislature) %>% as.integer
@@ -327,7 +331,7 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   a$authors = gsub("(.*), S. Kahan$", "\\1, S. Kahanec", a$authors)
 
   # sanity check: all sponsors detected
-  for(j in unique(a$legislature)) {
+  for (j in unique(a$legislature)) {
 
     stopifnot(unlist(strsplit(a$authors[ a$legislature == j ], ", ")) %in%
                 s$uid[ s$legislature == j ])
@@ -346,19 +350,6 @@ if(!file.exists(sponsors) | !file.exists(bills)) {
   s$party[ s$party == "MOST-HÍD" ] = "MOST-HID"
 
   stopifnot(s$party %in% names(colors))
-
-  # county recodings (Wikipedia English handles)
-
-  s$county = iconv(s$county, to = "ASCII//TRANSLIT")
-  s$county = gsub("\\skraj$", "", s$county)
-  s$county[ s$county == "Banskobystrick'y" ] = "Banská_Bystrica_Region"
-  s$county[ s$county == "Bratislavsk'y" ] = "Bratislava_Region"
-  s$county[ s$county == "Kosick'y" ] = "Košice_Region"
-  s$county[ s$county == "Trnavsk'y" ] = "Trnava_Region"
-  s$county[ s$county %in% c("Nitriansky", "Nitra") ] = "Nitra_Region"
-  s$county[ s$county == "Presovsk'y" ] = "Prešov_Region"
-  s$county[ s$county %in% c("Trenciansky", "Trenc'in") ] = "Trenčín_Region"
-  s$county[ s$county == "Zilinsk'y" ] = "Žilina_Region"
 
   # fix names
   s$name = gsub("(.*), (.*)", "\\2 \\1", s$name)
@@ -382,7 +373,7 @@ cat("Downloading photos for", length(p), "sponsors...\n")
 
 i = txtProgressBar(0, length(p), style = 3)
 
-for(j in p) {
+for (j in p) {
 
   setTxtProgressBar(i, which(p == j))
 
@@ -390,11 +381,11 @@ for(j in p) {
            "photos/", j) %>%
     gsub("&ImageWidth=140", ".jpg", .)
 
-  if(!file.exists(f))
+  if (!file.exists(f))
     try(download.file(j, f, mode = "wb", quiet = TRUE),
         silent = TRUE)
 
-  if(!file.info(f)$size) {
+  if (!file.info(f)$size) {
 
     cat("Failed to download:", f, "\n")
     file.remove(f)
@@ -402,3 +393,68 @@ for(j in p) {
   }
 
 }
+
+cat("\n")
+
+s$photo = gsub("http://www.nrsr.sk/web/dynamic/PoslanecPhoto.aspx\\?PoslanecID=|&ImageWidth=140",
+               "photos/", gsub("&ImageWidth=140", ".jpg", s$photo))
+
+s$county = gsub("\\s", "_", s$county)
+
+s$url = paste0(root, "Default.aspx?sid=poslanci/poslanec&PoslanecID=", s$id, "&CisObdobia=", s$legislature)
+
+# ==============================================================================
+# CHECK CONSTITUENCIES
+# ==============================================================================
+
+# county recodings (Wikipedia Slovenčina handles), from 'kraj' to 'sídlo'
+s$county = gsub("_kraj$", "", s$county)
+s$county[ s$county == "Banskobystrický" ] = "Banská_Bystrica"
+s$county[ s$county == "Bratislavský" ] = "Bratislava"
+s$county[ s$county == "Košický" ] = "Košice"
+s$county[ s$county == "Trnavský" ] = "Trnava"
+s$county[ s$county %in% c("Nitriansky", "Nitra") ] = "Nitra"
+s$county[ s$county == "Prešovský" ] = "Prešov"
+s$county[ s$county %in% c("Trenčiansky", "Trenčín") ] = "Trenčín"
+s$county[ s$county == "Žilinský" ] = "Žilina"
+s$county[ s$county == "" ] = NA
+table(s$county)
+
+cat("Checking constituencies,", sum(is.na(s$county)), "missing...\n")
+for (i in na.omit(unique(s$county))) {
+
+  g = GET(paste0("https://", "sk", ".wikipedia.org/wiki/", i)) # meta[ "lang"]
+
+  if (status_code(g) != 200)
+    cat("Missing Wikipedia entry:", i, "\n")
+
+  g = xpathSApply(htmlParse(g), "//title", xmlValue)
+  g = gsub("(.*) - Wikipédia(.*)", "\\1", g)
+
+  if (gsub("\\s", "_", g) != i)
+    cat("Discrepancy:", g, "(WP) !=", i ,"(data)\n")
+
+}
+
+# ============================================================================
+# QUALITY CONTROL
+# ============================================================================
+
+# - might be missing: born (int of length 4), constituency (chr),
+#   photo (chr, folder/file.ext)
+# - never missing: sex (chr, F/M), nyears (int), url (chr, URL),
+#   party (chr, mapped to colors)
+
+cat("Missing", sum(is.na(s$born)), "years of birth\n")
+stopifnot(is.integer(s$born) & nchar(s$born) == 4 | is.na(s$born))
+
+cat("Missing", sum(is.na(s$county)), "constituencies\n")
+stopifnot(is.character(s$county))
+
+cat("Missing", sum(is.na(s$photo)), "photos\n")
+stopifnot(is.character(s$photo) & grepl("^photos(_\\w{2})?/(.*)\\.\\w{3}", s$photo) | is.na(s$photo))
+
+stopifnot(!is.na(s$sex) & s$sex %in% c("F", "M"))
+stopifnot(!is.na(s$nyears) & is.integer(s$nyears))
+stopifnot(!is.na(s$url) & grepl("^http(s)?://(.*)", s$url))
+stopifnot(s$party %in% names(colors))
