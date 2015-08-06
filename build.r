@@ -17,9 +17,9 @@ for (ii in a$legislature %>% unique %>% sort) {
 
   cat(":", nrow(data), "cosponsored documents, ")
 
-  #
-  # directed edge list
-  #
+  # ============================================================================
+  # DIRECTED EDGE LIST
+  # ============================================================================
 
   edges = lapply(data$authors, function(d) {
 
@@ -32,9 +32,9 @@ for (ii in a$legislature %>% unique %>% sort) {
 
   }) %>% bind_rows
 
-  #
-  # edge weights
-  #
+  # ============================================================================
+  # EDGE WEIGHTS
+  # ============================================================================
 
   # first author self-loops, with counts of cosponsors
   self = subset(edges, i == j)
@@ -75,9 +75,9 @@ for (ii in a$legislature %>% unique %>% sort) {
 
   cat(nrow(edges), "edges, ")
 
-  #
-  # directed network
-  #
+  # ============================================================================
+  # DIRECTED NETWORK
+  # ============================================================================
 
   n = network(edges[, 1:2 ], directed = TRUE)
 
@@ -93,7 +93,12 @@ for (ii in a$legislature %>% unique %>% sort) {
   n %n% "n_cosponsored" = nrow(data)
   n %n% "n_sponsors" = table(subset(a, legislature == ii)$n_au)
 
+  # ============================================================================
+  # VERTEX-LEVEL ATTRIBUTES
+  # ============================================================================
+
   n_au = as.vector(n_au[ network.vertex.names(n) ])
+
   n %v% "n_au" = ifelse(is.na(n_au), 0, n_au)
 
   n_co = as.vector(n_co[ network.vertex.names(n) ])
@@ -124,9 +129,9 @@ for (ii in a$legislature %>% unique %>% sort) {
   set.edge.attribute(n, "nfw", edges$nfw) # Newman-Fowler weights
   set.edge.attribute(n, "gsw", edges$gsw) # Gross-Shalizi weights
 
-  #
-  # network plot
-  #
+  # ============================================================================
+  # SAVE PLOTS
+  # ============================================================================
 
   if (plot) {
 
@@ -137,9 +142,9 @@ for (ii in a$legislature %>% unique %>% sort) {
 
   }
 
-  #
-  # save objects
-  #
+  # ============================================================================
+  # SAVE OBJECTS
+  # ============================================================================
 
   # replace uids with names
   network.vertex.names(n) = sp[ network.vertex.names(n), "name" ]
@@ -158,9 +163,9 @@ for (ii in a$legislature %>% unique %>% sort) {
   assign(paste0("edges_sk", substr(legislatures[ ii ], 1, 4)), edges)
   assign(paste0("bills_sk", substr(legislatures[ ii ], 1, 4)), data)
 
-  #
-  # export gexf
-  #
+  # ============================================================================
+  # SAVE GEXF
+  # ============================================================================
 
   if (gexf)
     save_gexf(n, paste0("net_sk", legislatures[ ii ]), mode, colors)
@@ -169,6 +174,3 @@ for (ii in a$legislature %>% unique %>% sort) {
 
 if (gexf)
   zip("net_sk.zip", dir(pattern = "^net_sk\\d{4}-\\d{4}\\.gexf$"))
-
-save(list = ls(pattern = "^(net|edges|bills)_sk\\d{4}$"),
-     file = "data/net_sk.rda")

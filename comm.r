@@ -140,6 +140,3 @@ for (i in ls(pattern = "^net_")) {
   assign(paste0("co", i), nn)
 
 }
-
-save(list = ls(pattern = "^((co)?net|edges|bills)_sk\\d{4}$"),
-     file = "data/net_sk.rda")
