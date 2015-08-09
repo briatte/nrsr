@@ -85,7 +85,7 @@ stopifnot(rowSums(comm[, -1 ]) == c$n_members)
 c$legislature = substr(legislatures[ c$legislature ], 1, 4)
 
 # assign co-memberships to networks
-for (i in ls(pattern = "^net_")) {
+for (i in ls(pattern = "^net_sk")) {
 
   n = get(i)
 
