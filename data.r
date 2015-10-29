@@ -22,11 +22,11 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
     u = paste0(root, "Default.aspx?sid=poslanci%2fzmeny")
     p = GET(u)
 
-    ev = html(p) %>%
+    ev = read_html(p) %>%
       html_node(xpath = "//input[@name='__EVENTVALIDATION']") %>%
       html_attr("value")
 
-    vs = html(p) %>%
+    vs = read_html(p) %>%
       html_node(xpath = "//input[@name='__VIEWSTATE']") %>%
       html_attr("value")
 
@@ -64,7 +64,7 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
 
         d = POST(u, body = pinfo, cookies = p$cookies)
 
-        if (html(d) %>% html_node("title") %>% html_text == "www.nrsr.sk") {
+        if (read_html(d) %>% html_node("title") %>% html_text == "www.nrsr.sk") {
 
           cat(": failed\n")
           next
@@ -74,17 +74,17 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
         writeLines(content(d, "text"), paste0("raw/sponsors-", i, "-page-",
                                               sprintf("%02.0f", j), ".html"))
 
-        ev = html(d) %>%
+        ev = read_html(d) %>%
           html_node(xpath = "//input[@name='__EVENTVALIDATION']") %>%
           html_attr("value")
 
-        vs = html(d) %>%
+        vs = read_html(d) %>%
           html_node(xpath = "//input[@name='__VIEWSTATE']") %>%
           html_attr("value")
 
         cat(":", "EV", substr(ev, 1, 10), "VS", substr(vs, 1, 10), "\n")
 
-        l = html(d) %>%
+        l = read_html(d) %>%
           html_nodes(xpath = "//a[starts-with(@href, 'java')]") %>%
           html_attr("href")
 
@@ -107,7 +107,7 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
 
       setTxtProgressBar(i, which(p == j))
 
-      t = html(j) %>%
+      t = read_html(j) %>%
         html_nodes("#_sectionLayoutContainer_ctl01__ResultGrid2 tr")
 
       t = t[ html_attr(t, "class") %>%
@@ -212,7 +212,7 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
 
     setTxtProgressBar(i, which(p == j))
 
-    t = html(j) %>% html_nodes(".mp_personal_data span") %>% html_text
+    t = read_html(j) %>% html_nodes(".mp_personal_data span") %>% html_text
     w = rbind(w, data_frame(
       legislature = gsub("raw/mp-\\d+-(\\d)\\.html", "\\1", j) %>% as.integer,
       id = gsub("raw/mp-(\\d+)(.*)", "\\1", j) %>% as.integer,
@@ -220,7 +220,7 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
       party = gsub("\\s", "", t[4]), born = str_extract(t[5], "\\d{4}"),
       natl = t[6] %>% str_trim,
       place = t[7] %>% str_trim, county = t[8] %>% str_trim,
-      photo = html(j) %>% html_node(".mp_foto img") %>% html_attr("src")
+      photo = read_html(j) %>% html_node(".mp_foto img") %>% html_attr("src")
     ))
 
   }
@@ -247,7 +247,7 @@ if (!file.exists(sponsors) | !file.exists(bills)) {
 
     setTxtProgressBar(i, which(p == j))
 
-    t = html(j) %>%
+    t = read_html(j) %>%
       html_nodes(xpath = "//table[@id='_sectionLayoutContainer_ctl01_dgResult']/tbody/tr")
 
     if (length(t) > 0)
