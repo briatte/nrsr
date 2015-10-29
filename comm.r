@@ -21,7 +21,7 @@ for (i in 133:1) {
 
   h = read_html(f)
 
-  if (read_html(h) %>% html_node("title") %>% html_text == "www.nrsr.sk") {
+  if (html_node(h, "title") %>% html_text == "www.nrsr.sk") {
 
     cat("Committee", i, "is empty\n")
     next
